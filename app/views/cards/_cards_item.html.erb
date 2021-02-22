@@ -1,0 +1,83 @@
+<!-- <p>Your current card value has a subtotal of: <%#= current_order.subtotal %></p> -->
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <%if @order_items.present?%>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col"> </th>
+                        <th scope="col">Product</th>
+                        <th scope="col" class="text-center">Quantity</th>
+                        <th scope="col" class="text-right">Price</th>
+                        <th scope="col" class="text-right">Total</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% @order_items.each do |item| %>
+                    <tr>
+                        <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
+                        <td><%= item.product.title %></td>
+                        <td>
+                          <%= form_for item, remote: true do |f| %>
+
+                        <%= f.hidden_field :product_id, :value => item.product.id %>
+                        <%= f.number_field :quantity, :value => item.quantity.to_i %>
+                        <%= f.submit "Update Card "%>
+                        </td>
+                        <td class="text-right">&#x20B9; <%= item.product.price %> </td>
+                        <td class="text-right">&#x20B9; <%= item.total %> </td>
+                        <td class="text-right">
+
+
+                        <%= link_to '<i class="fa fa-trash"></i>'.html_safe, order_item_path(item), method: :delete, remote: true,class: "btn btn-sm btn-danger"%>
+                      <% end %>
+                    </tr>
+                  <%end%>
+                  <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Sub-Total</td>
+                        <td class="text-right">&#x20B9; <%= current_order.subtotal %></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Shipping</td>
+                        <td class="text-right">&#x20B9; 0</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Total</strong></td>
+                        <td class="text-right"><strong>&#x20B9; <%= current_order.subtotal %></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <%end%>
+          </div>
+          </div>
+        <div class="col mb-2">
+            <div class="row">
+                <div class="col-sm-12  col-md-6">
+                    <%= link_to "Continue Shopping", root_url,class: "btn btn-block btn-light" %>
+                </div>
+                <%if @order_items.present?%>
+                <div class="col-sm-12 col-md-6 text-right">
+                    <%= link_to "Checkout", success_page_path,class: "btn btn-lg btn-block btn-success text-uppercase" %>
+                </div>
+                <%end%>
+            </div>
+        </div>
+    </div>
+</div>
+
